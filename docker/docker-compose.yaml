@@ -1,0 +1,10 @@
+version: '3.1'
+
+services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    # (this is just an example, not intended to be a production configuration)
