@@ -1,10 +1,23 @@
 version: '3.1'
-
 services:
-  db:
+  mysql:
     image: mysql
+    container_name: mysql_nest_user_app
+    restart: always
+    volumes:
+      - ./create_table_user.sql:/docker-entrypoint-initdb.d/create_table_user.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - '${MYSQL_PORT}:3306'
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
     restart: always
     environment:
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
-    # (this is just an example, not intended to be a production configuration)
+      PMA_HOST: mysql_nest_user_app
+    ports:
+      - '8080:80'
