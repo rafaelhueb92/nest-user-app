@@ -4,7 +4,6 @@ import {
   Get,
   Post,
   UploadedFile,
-  UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -12,13 +11,12 @@ import { AuthLoginDTO } from './dto/auth-login.dto';
 import { AuthRegisternDTO } from './dto/auth-register.dto';
 import { AuthForgetDTO } from './dto/auth-forget.dto';
 import { AuthReseetDTO } from './dto/auth-reset.dto';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
-import { User } from 'src/decorators/user.decorator';
+import { User } from '../decorators/user.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { writeFile, mkdir } from 'fs/promises';
-import { existsSync } from 'fs';
+import { writeFile } from 'fs/promises';
 import { join } from 'path';
 import { createPath } from './utils/create-path.utils';
 

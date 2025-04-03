@@ -5,9 +5,10 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { UsersService } from 'src/users/users.service';
+import { PrismaService } from '../prisma/prisma.service';
+import { UsersService } from '../users/users.service';
 import { AuthRegisternDTO } from './dto/auth-register.dto';
+import { MailerService } from '@nestjs-modules/mailer/dist';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -16,6 +17,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly prismaService: PrismaService,
     private readonly userService: UsersService,
+    private readonly mailerService: MailerService,
   ) {}
 
   createToken(user: User) {
@@ -74,23 +76,42 @@ export class AuthService {
 
     if (!user) throw new UnauthorizedException('Email or password incorrect!');
 
-    // TO DO: Send email!
+    const token = this.jwtService.sign(
+      {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
+      {
+        expiresIn: '30 minutes',
+        subject: String(user.id),
+        issuer: 'login',
+        audience: 'users',
+      },
+    );
 
-    return user;
+    await this.mailerService.sendMail({
+      subject: `Password Recovery`,
+      to: email,
+      template: 'forget',
+      context: {
+        name: user.name,
+        token,
+      },
+    });
+
+    return;
   }
 
   async reset(password: string, token: string) {
-    // TO DO: Validate token
+    const data = await this.checkToken(token);
 
-    const id = 0; // extract from token
+    if (!data && isNaN(data.id)) {
+      throw new BadRequestException('Invalid Toke!');
+    }
 
-    const user = await this.prismaService.user.update({
-      where: {
-        id,
-      },
-      data: {
-        password,
-      },
+    const user = await this.userService.updatePartial(data.id, {
+      password,
     });
 
     return this.createToken(user);

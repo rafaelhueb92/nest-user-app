@@ -14,11 +14,11 @@ import { createUserDTO } from './dto/create-user.dto';
 import { updatePutUserDTO } from './dto/update-put-user.dto';
 import { updatePatchUserDTO } from './dto/update-patch-user.dto';
 import { UsersService } from './users.service';
-import { ParamId } from 'src/decorators/param-id.decorator';
-import { Role } from 'src/enum/role.enum';
-import { Roles } from 'src/decorators/roles.decorator';
-import { RoleGuard } from 'src/guards/role.guard';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { ParamId } from '../decorators/param-id.decorator';
+import { Role } from '../enum/role.enum';
+import { Roles } from '../decorators/roles.decorator';
+import { RoleGuard } from '../guards/role.guard';
+import { AuthGuard } from '../auth/auth.guard';
 
 //Can be used globally here @UseInterceptors(LogInterceptor)
 @UseGuards(AuthGuard, RoleGuard)
