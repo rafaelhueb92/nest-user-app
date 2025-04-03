@@ -63,3 +63,5 @@ documentation
 ./documentation/*
 /documentation/
 
+storage
+package-lock.json

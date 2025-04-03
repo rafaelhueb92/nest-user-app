@@ -7,16 +7,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// exec npx prisma db pull
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String?  @db.VarChar(63)
-  email     String?  @db.VarChar(127)
-  password  String?  @db.VarChar(127)
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @default(now()) @db.Timestamp(0)
-
-  // afeter update exec npx prisma generate
+  id        Int       @id @default(autoincrement())
+  name      String?   @db.VarChar(63)
+  email     String?   @db.VarChar(127)
+  password  String?   @db.VarChar(127)
+  role      Int?      @default(1)
+  birthAt   DateTime? @db.Timestamp(0)
+  createdAt DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt DateTime  @default(now()) @db.Timestamp(0)
 
   @@map("users")
 }
